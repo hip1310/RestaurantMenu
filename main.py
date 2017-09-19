@@ -4,13 +4,29 @@ from flask import Flask
 # all the imports
 app = Flask(__name__)
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, Restaurant, MenuItem
+
+engine = create_engine('sqlite:///restaurantmenu.db')
+Base.metadata.bind = engine
+
+DBSession = sessionmaker(bind = engine)
+session = DBSession()
+
 # decorator that wraps the HelloWorld() function inside
 # the app.route() function so that HelloWorld() gets called
 # whenever the specified routes are sent from the browser
-@app.route('/')
-@app.route('/hello')
-def HelloWorld():
-	return "Hello World"
+@app.route('/menuitems')
+def getMenuItems():
+	restaurant = session.query(Restaurant).first()
+	menuItems = session.query(MenuItem).filter_by(restaurant_id = restaurant.id)
+	output = restaurant.name + </br>
+	for i in menuItems:
+		output += &nbsp
+		output += i.name
+		output += '</br>'
+	return output
 
 # The python file ran by python interpreter gets the by default name __main__
 # While for all other imported python files, __name__ variable is set to
