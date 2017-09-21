@@ -1,0 +1,20 @@
+<html>
+	<body>
+        <!-- Using restaurant query result from main.py -->
+		<h1> {{ restaurant.name }} </h1>
+
+		<!-- Using menuItems query result from main.py -->
+		{% for i in menuItems %}
+
+		<div>
+
+		{{ i.name }} </br>
+		{{ i.description }} </br>		
+		{{ i.price }} </br></br>
+
+		</div>
+	    
+		{% endfor %}
+
+	</body>
+</html>

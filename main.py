@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 # Anytime we run the python application a special variable named
 #  __name__ is defined for the application in order to use it for
 # all the imports
@@ -22,20 +22,14 @@ session = DBSession()
 @app.route('/restaurant/<int:restaurant_id>')
 def viewRestaurantMenu(restaurant_id):
 	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
-	output = ''
 	menuItems = session.query(MenuItem).filter_by(restaurant_id = restaurant_id)
-	output += restaurant.name + '</br>' + '</br>'
-	for i in menuItems:
-		output += '&nbsp' + '&nbsp' + '&nbsp'
-		output += i.name
-		output += '</br>'
-		output += '&nbsp' + '&nbsp' + '&nbsp'
-		output += i.description
-		output += '</br>'
-		output += '&nbsp' + '&nbsp' + '&nbsp'
-		output += i.price
-		output += '</br>' + '</br>'
-	return output
+	# jinja2 template engine provides HTML escaping
+	# Flask will look for templates sepcified in render_template method into
+	# /templates folder
+	# Here the query results for restaurant and menuItems are passed to
+	# the menu.html template
+	return render_template('menu.html', restaurant=restaurant, 
+		                                menuItems=menuItems)
 
 # Method to add new restaurant menu item
 # for one restaurant by using restaurant id
