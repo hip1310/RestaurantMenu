@@ -10,10 +10,20 @@
 
 		{{ i.name }} </br>
 		{{ i.description }} </br>		
-		{{ i.price }} </br></br>
-
+		{{ i.price }} </br>
+		<!-- url_for is a flask feature that helps to build a URL
+		     to a specific python function. It accepts the name of the function as first argument and a number of keyword arguments, each corresponding to the variable part of the URL rule. 
+	    -->
+	    <!-- Creating links to edit and delete menu item which calls
+	         editMenuItem and deleteMenuItem functions respectively,
+	         from the main.py file.
+		-->
+		<a href= {{ url_for('editMenuItem', restaurant_id
+		          = restaurant.id, item_id = i.id)}}> Edit </a></br>
+		<a href= {{ url_for('deleteMenuItem', restaurant_id
+		          = restaurant.id, item_id = i.id)}}> Delete </a></br></br>
 		</div>
-	    
+
 		{% endfor %}
 
 	</body>
