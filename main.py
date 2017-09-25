@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 # Anytime we run the python application a special variable named
 #  __name__ is defined for the application in order to use it for
 # all the imports
@@ -23,6 +23,7 @@ session = DBSession()
 def viewRestaurantMenu(restaurant_id):
 	restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
 	menuItems = session.query(MenuItem).filter_by(restaurant_id = restaurant_id)
+
 	# jinja2 template engine provides HTML escaping
 	# Flask will look for templates sepcified in render_template method into
 	# /templates folder
@@ -33,9 +34,25 @@ def viewRestaurantMenu(restaurant_id):
 
 # Method to add new restaurant menu item
 # for one restaurant by using restaurant id
-@app.route('/restaurant/<int:restaurant_id>/new')
+@app.route('/restaurant/<int:restaurant_id>/new', methods=['GET','POST'])
 def addNewMenuItem(restaurant_id):
-	return "page to create a new menu item"
+	# When 'GET' request is received, We will display the html page
+	# to add new menu item.
+	if request.method == 'GET':
+		return render_template('newMenuItem.html', restaurant_id
+			                                      =restaurant_id)
+	# When 'POST' request is received, We will use database session
+	# to insert new data in menuitem table and then using Flask's
+	# redirect feature, redirect to the page to view all menu items
+	# for that restaurant.
+	elif request.method == 'POST':
+		newMenuItem = MenuItem(name=request.form['name'],
+					  description=request.form['description'],
+                      price=request.form['price'], restaurant_id=restaurant_id)
+		session.add(newMenuItem)
+		session.commit()
+		return redirect(url_for('viewRestaurantMenu', restaurant_id=
+			                    restaurant_id))
 
 # Method to edit restaurant menu item using item id
 # for one restaurant by using restaurant id

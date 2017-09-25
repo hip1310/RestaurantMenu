@@ -3,6 +3,10 @@
         <!-- Using restaurant query result from main.py -->
 		<h1> {{ restaurant.name }} </h1>
 
+		<!-- Add a link to create new menu item -->
+		<a href="{{ url_for('addNewMenuItem', restaurant_id
+		         = restaurant.id) }}"> Create New Item </a></br></br>
+
 		<!-- Using menuItems query result from main.py -->
 		{% for i in menuItems %}
 
