@@ -1,0 +1,34 @@
+<html>
+	<body>
+		<h1> Edit Menu Item </h1>
+
+		<!-- After the form to edit menu item is submitted,
+			 we have to call the python function to edit menu
+			 item and post all the data. We also have to pass the
+			 restaurant id and item id as the python function
+			 require that as parameters.
+		-->
+		<form action='{{ url_for('editMenuItem', restaurant_id
+		                =restaurant_id, item_id=item.id) }}' method='POST'>
+		    <p> Name: </p>
+		    <input type='text' size='30' name='name'
+		    placeholder='{{item.name}}'>
+			</br> </br>
+
+		    <p> Description: </p>
+		    <textarea name="description" cols="40" rows="5"
+		    placeholder='{{item.description}}'></textarea>
+		    </br> </br>
+
+			<p> Price: </p>
+		    <input type='text' size='8' name='price'
+		    placeholder='{{item.price}}'>
+			</br> </br>
+
+		    <input type='submit' value='Edit'> &nbsp; &nbsp; &nbsp;
+		    <!-- Add a link to cancel editing menu item -->
+		    <a href='{{url_for('viewRestaurantMenu', restaurant_id=
+		    restaurant_id)}}'> Cancel </a>
+		</form>
+	</body>
+</html>

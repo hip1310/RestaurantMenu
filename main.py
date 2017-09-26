@@ -56,9 +56,30 @@ def addNewMenuItem(restaurant_id):
 
 # Method to edit restaurant menu item using item id
 # for one restaurant by using restaurant id
-@app.route('/restaurant/<int:restaurant_id>/<int:item_id>/edit')
+@app.route('/restaurant/<int:restaurant_id>/<int:item_id>/edit',
+	                                     methods=['GET','POST'])
 def editMenuItem(restaurant_id, item_id):
-	return "page to edit a menu item"
+	menuItem = session.query(MenuItem).filter_by(id=item_id).one()
+	# When 'GET' request is received, We will display the html page
+	# to edit menu item.
+	if request.method == 'GET':
+		return render_template('editMenuItem.html', restaurant_id
+			                    =restaurant_id, item=menuItem)
+	# When 'POST' request is received, We will use database session
+	# to update data in menuitem table and then using Flask's
+	# redirect feature, redirect to the page to view all menu items
+	# for that restaurant.
+	elif request.method == 'POST':
+		if request.form['name']:
+			menuItem.name = request.form['name']
+		if request.form['description']:
+			menuItem.description = request.form['description']
+		if request.form['price']:
+			menuItem.price = request.form['price']
+		session.add(menuItem)
+		session.commit()
+		return redirect(url_for('viewRestaurantMenu', restaurant_id=
+			                    restaurant_id))
 
 # Method to delete restaurant menu item using item id
 # for one restaurant by using restaurant id
