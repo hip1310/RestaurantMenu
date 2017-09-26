@@ -1,0 +1,23 @@
+<html>
+	<body>
+		<h1> Delete Menu Item </h1>
+
+		<h3> Are you sure you want to delete menu item "{{item.name}}"? 
+		</h3>
+
+		<!-- After the form to delete menu item is submitted,
+			 we have to call the python function to delete menu
+			 item and post item data. We also have to pass the
+			 restaurant id and item id as the python function
+			 requires that as parameters.
+		-->
+		<form action='{{ url_for('deleteMenuItem', restaurant_id
+		                =restaurant_id, item_id=item.id) }}' method='POST'>
+
+		    <input type='submit' value='Delete'> &nbsp; &nbsp; &nbsp;
+		    <!-- Add a link to cancel deleting menu item -->
+		    <a href='{{url_for('viewRestaurantMenu', restaurant_id=
+		    restaurant_id)}}'> Cancel </a>
+		</form>
+	</body>
+</html>

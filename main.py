@@ -83,9 +83,24 @@ def editMenuItem(restaurant_id, item_id):
 
 # Method to delete restaurant menu item using item id
 # for one restaurant by using restaurant id
-@app.route('/restaurant/<int:restaurant_id>/<int:item_id>/delete')
+@app.route('/restaurant/<int:restaurant_id>/<int:item_id>/delete',
+											methods=['GET','POST'])
 def deleteMenuItem(restaurant_id, item_id):
-	return "page to delete a menu item"
+	menuItem = session.query(MenuItem).filter_by(id=item_id).one()
+	# When 'GET' request is received, We will display the html page
+	# to delete menu item.
+	if request.method == 'GET':
+		return render_template('deleteMenuItem.html', restaurant_id
+			                    =restaurant_id, item=menuItem)
+	# When 'POST' request is received, We will use database session
+	# to delete item record in menuitem table and then using Flask's
+	# redirect feature, redirect to the page to view all menu items
+	# for that restaurant.
+	elif request.method == 'POST':
+		session.delete(menuItem)
+		session.commit()
+		return redirect(url_for('viewRestaurantMenu', restaurant_id=
+			                    restaurant_id))
 
 # The python file ran by python interpreter gets the by default name __main__
 # While for all other imported python files, __name__ variable is set to
