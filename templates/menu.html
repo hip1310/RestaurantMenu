@@ -3,6 +3,22 @@
         <!-- Using restaurant query result from main.py -->
 		<h1> {{ restaurant.name }} </h1>
 
+		<!-- Display confirmation/feedback messages if any
+			 get_flashed_messages() returns all the flash messages stored
+			 in  session
+			 with provides block boundary for variable/object accessibility
+			 So messages won't be accessible outside of the with block
+		-->
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<ul>
+					{% for message in messages %}
+						<li> <strong> {{message}} </strong> </li>
+					{% endfor %}
+				</ul>
+		    {% endif %}
+		{% endwith %}
+
 		<!-- Add a link to create new menu item -->
 		<a href="{{ url_for('addNewMenuItem', restaurant_id
 		         = restaurant.id) }}"> Create New Item </a></br></br>

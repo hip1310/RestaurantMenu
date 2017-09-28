@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+import os
+from flask import Flask, render_template, request, redirect, url_for, flash
 # Anytime we run the python application a special variable named
 #  __name__ is defined for the application in order to use it for
 # all the imports
@@ -51,6 +52,9 @@ def addNewMenuItem(restaurant_id):
                       price=request.form['price'], restaurant_id=restaurant_id)
 		session.add(newMenuItem)
 		session.commit()
+		# store a flash message in session
+		# We will use this message to give feedback to user in html page.
+		flash("Successfully added new menu item!!!")
 		return redirect(url_for('viewRestaurantMenu', restaurant_id=
 			                    restaurant_id))
 
@@ -78,6 +82,7 @@ def editMenuItem(restaurant_id, item_id):
 			menuItem.price = request.form['price']
 		session.add(menuItem)
 		session.commit()
+		flash("Successfully edited menu item!!!")
 		return redirect(url_for('viewRestaurantMenu', restaurant_id=
 			                    restaurant_id))
 
@@ -99,6 +104,7 @@ def deleteMenuItem(restaurant_id, item_id):
 	elif request.method == 'POST':
 		session.delete(menuItem)
 		session.commit()
+		flash("Successfully deleted menu item!!!")
 		return redirect(url_for('viewRestaurantMenu', restaurant_id=
 			                    restaurant_id))
 
@@ -106,5 +112,12 @@ def deleteMenuItem(restaurant_id, item_id):
 # While for all other imported python files, __name__ variable is set to
 # actual python file name
 if __name__ == '__main__':
+	"""
+	session object in flask allows to store information specific to a user
+	from one request to the next (or from one web page to another.)
+	In order to use sessions we have to set a secret key.
+	Message flashing in Flask works using a session.
+	"""
+	app.secret_key = os.urandom(24)
 	app.debug = True
 	app.run(host = '0.0.0.0', port = 5000)
