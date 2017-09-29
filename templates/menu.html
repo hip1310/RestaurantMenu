@@ -1,8 +1,16 @@
 <html>
+	<head>
+		<link rel=stylesheet type=text/css
+		href="{{ url_for('static', filename = 'styles.css')}}">
+	</head>
 	<body>
-        <!-- Using restaurant query result from main.py -->
+		<div class='pane'>
+		<div class='header'>
+		<!-- Using restaurant query result from main.py -->
 		<h1> {{ restaurant.name }} </h1>
+		</div>
 
+		<div class='flash'>
 		<!-- Display confirmation/feedback messages if any
 			 get_flashed_messages() returns all the flash messages stored
 			 in  session
@@ -18,33 +26,40 @@
 				</ul>
 		    {% endif %}
 		{% endwith %}
+		</div>
 
 		<!-- Add a link to create new menu item -->
 		<a href="{{ url_for('addNewMenuItem', restaurant_id
-		         = restaurant.id) }}"> Create New Item </a></br></br>
+		         = restaurant.id) }}"> Create New Item </a>
 
 		<!-- Using menuItems query result from main.py -->
 		{% for i in menuItems %}
 
-		<div>
+		<div class='nameAndprice'>
+		<span class='name'> <p> {{ i.name }} ..................................... </p> </span>
+		</span>
+		<p>  </p>
+		<span class='price'> <p> {{ i.price }} </p> </span>
+		</div>
 
-		{{ i.name }} </br>
-		{{ i.description }} </br>		
-		{{ i.price }} </br>
+		<div class='description'> <p> {{ i.description }} </p> </div>
+
 		<!-- url_for is a flask feature that helps to build a URL
 		     to a specific python function. It accepts the name of the function as first argument and a number of keyword arguments, each corresponding to the variable part of the URL rule. 
 	    -->
-	    <!-- Creating links to edit and delete menu item which calls
+
+		<div class='editdeletepane'>
+		<!-- Creating links to edit and delete menu item which calls
 	         editMenuItem and deleteMenuItem functions respectively,
 	         from the main.py file.
 		-->
 		<a href= {{ url_for('editMenuItem', restaurant_id
-		          = restaurant.id, item_id = i.id)}}> Edit </a></br>
+		          = restaurant.id, item_id = i.id)}}> Edit </a>
 		<a href= {{ url_for('deleteMenuItem', restaurant_id
-		          = restaurant.id, item_id = i.id)}}> Delete </a></br></br>
+		          = restaurant.id, item_id = i.id)}}> Delete </a>
 		</div>
-
 		{% endfor %}
 
+		</div>
 	</body>
 </html>
