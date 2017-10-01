@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 # Anytime we run the python application a special variable named
 #  __name__ is defined for the application in order to use it for
 # all the imports
@@ -107,6 +107,21 @@ def deleteMenuItem(restaurant_id, item_id):
 		flash("Successfully deleted menu item!!!")
 		return redirect(url_for('viewRestaurantMenu', restaurant_id=
 			                    restaurant_id))
+
+# API to get all the menuitems of a restaurant in json format
+# Flask's jsonify() funcion turns the JSON output into a Response object
+# with the application/json mimetype.
+@app.route('/restaurants/<int:restaurant_id>/menu')
+def restaurantMenuAsJson(restaurant_id):
+	items = session.query(MenuItem).filter_by(restaurant_id
+		                                      =restaurant_id).all()
+	return jsonify(MenuItems = [i.serialize for i in items])
+
+# API to get a single menu item of a restaurant in json format
+@app.route('/restaurants/<int:restaurant_id>/menu/<int:item_id>')
+def menuItemAsJson(restaurant_id, item_id):
+	item = session.query(MenuItem).filter_by(id=item_id).one()
+	return jsonify(MenuItem = [item.serialize])
 
 # The python file ran by python interpreter gets the by default name __main__
 # While for all other imported python files, __name__ variable is set to

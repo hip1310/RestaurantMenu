@@ -41,6 +41,17 @@ class MenuItem(Base):
     restaurant_id = Column(Integer, ForeignKey('restaurant.id'))
     restaurant = relationship(Restaurant)
 
+    # Function to send JSON objects in a serializable format
+    @property
+    def serialize(self):
+        return{
+            'id'          : self.id,
+            'name'        : self.name,
+            'description' : self.description,
+            'price'       : self.price,
+            'course'      : self.course
+        }
+
 #### Configuration at the end of the file ####
 # Create (or connect) the database and add tables and columns #
 # Create the database file
