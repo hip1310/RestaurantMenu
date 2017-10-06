@@ -9,11 +9,24 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 
+# Imports for adding anti-forgery state token
+from flask import session as login_session
+import random, string
+
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
+
+# Create a state token to prevent request forgery
+# Store it in a session for later validation
+@app.route('/login')
+def showLogin():
+	state = ''.join(random.choice(string.ascii_letters + string.digits)
+		            for x in xrange(32))
+	login_session['state'] = state
+	return "The current session state is " + login_session['state']
 
 # Method to view restaurant menu for one restaurant by using restaurant id
 
